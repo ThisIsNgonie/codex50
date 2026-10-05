@@ -22,4 +22,9 @@ return [
 
     // Hostinger Database Password
     'db_pass' => 'your_strong_password_here',
+
+    // Optional first Super Admin, created on first request if this email doesn't exist yet.
+    // Existing accounts are never changed. Remove these lines after the first login.
+    // 'admin_email' => 'admin@example.com',
+    // 'admin_password' => 'change-me',
 ];

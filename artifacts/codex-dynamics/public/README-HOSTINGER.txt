@@ -24,6 +24,11 @@ Option B: Hostinger MySQL / MariaDB Database
   - Enter your DB_HOST (usually 'localhost'), DB_NAME, DB_USER, and DB_PASS.
   - Codex Dynamics will automatically bootstrap all tables upon first request.
 
+FIRST SUPER ADMIN:
+  - Set admin_email / admin_password in api/config.php (or the CODEX_ADMIN_EMAIL /
+    CODEX_ADMIN_PASSWORD environment variables). The account is created on the first
+    request if that email does not exist yet; existing accounts are never changed.
+
 WHAT IS INCLUDED & WORKING:
 - Complete High-Performance Public Agency Site:
     * Hero showcases, interactive service tabs, portfolio grid, live booking modal.

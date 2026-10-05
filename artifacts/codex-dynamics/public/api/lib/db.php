@@ -143,7 +143,27 @@ function getDb(): PDO {
     }
 
     ensureSchemaCurrent($pdo);
+    ensureBootstrapSuperAdmin($pdo, $cfg ?? []);
     return $pdo;
+}
+
+/**
+ * Creates the first Super Admin from CODEX_ADMIN_EMAIL / CODEX_ADMIN_PASSWORD (or the
+ * matching config.php keys) when that email does not exist yet. Existing accounts are
+ * never modified, so a password changed in the CRM is not reset.
+ */
+function ensureBootstrapSuperAdmin(PDO $pdo, array $cfg): void {
+    $email = strtolower(trim((string)(getenv('CODEX_ADMIN_EMAIL') ?: ($cfg['admin_email'] ?? ''))));
+    $password = (string)(getenv('CODEX_ADMIN_PASSWORD') ?: ($cfg['admin_password'] ?? ''));
+    if ($password === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) return;
+    $existing = $pdo->prepare('SELECT id FROM staff_users WHERE LOWER(email) = ?');
+    $existing->execute([$email]);
+    if ($existing->fetchColumn()) return;
+    $hash = password_hash($password, PASSWORD_DEFAULT);
+    if ($hash === false) return;
+    $pdo->prepare("INSERT INTO staff_users (id, email, password, name, role, status, capabilities, created_at)
+        VALUES (?, ?, ?, 'Super Admin', 'Super Admin', 'Active', '{}', ?)")
+        ->execute(['staff_' . bin2hex(random_bytes(8)), $email, $hash, date('c')]);
 }
 
 /**
