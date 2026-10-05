@@ -439,10 +439,14 @@ export async function loadCrmThemeFromServer() {
   return cacheAndApplyCrmTheme({ ...DEFAULT_CRM_SETTINGS, ...serverTheme, glassEffect: false });
 }
 
-function cacheAndApplyCrmTheme(merged) {
+export function cacheCrmThemeLocally(settings) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...DEFAULT_CRM_SETTINGS, ...settings, glassEffect: false }));
   } catch (_) {}
+}
+
+function cacheAndApplyCrmTheme(merged) {
+  cacheCrmThemeLocally(merged);
   applyCrmThemeToDom(merged);
   window.dispatchEvent(new CustomEvent('cdx:crm-theme-changed', { detail: merged }));
   return merged;

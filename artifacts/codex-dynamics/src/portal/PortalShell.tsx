@@ -96,7 +96,7 @@ export function PortalShell({ currentPath, onNavigate, children }: PortalShellPr
   const notifications = portalDb.getNotifications(client.id);
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-[#F5F5F7] dark:bg-[#000000] text-[#1D1D1F] dark:text-[#F5F5F7] flex flex-col font-sans transition-colors duration-200">
+    <div className="cdx-portal h-screen w-screen overflow-hidden bg-[#F5F5F7] dark:bg-[#000000] text-[#1D1D1F] dark:text-[#F5F5F7] flex flex-col font-sans transition-colors duration-200">
       {typeof window !== 'undefined' && sessionStorage.getItem('codex_impersonating_admin') === 'true' && (
         <div className="bg-[#0071E3] text-white px-4 py-2 text-xs flex items-center justify-between font-medium shadow-sm z-50 shrink-0">
           <div className="flex items-center gap-2">

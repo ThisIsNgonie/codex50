@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import './CrmSettings.css';
 import {
   CRM_THEME_PRESETS,
@@ -8,6 +8,7 @@ import {
   DEFAULT_CRM_SETTINGS,
   getCrmThemeSettings,
   saveCrmThemeSettings,
+  cacheCrmThemeLocally,
   applyCrmThemeToDom,
   generateHarmoniousCrmColors,
   calcContrast,
@@ -32,7 +33,8 @@ import {
 
 export default function CrmSettingsTab({ showNotification }) {
   const [settings, setSettings] = useState(getCrmThemeSettings);
-  const [saved, setSaved] = useState(false);
+  const [saveState, setSaveState] = useState('saved');
+  const saved = saveState === 'saved';
   const [copiedIndex, setCopiedIndex] = useState(null);
 
   // Coolors Interactive Palette Generator Stage
@@ -45,10 +47,53 @@ export default function CrmSettingsTab({ showNotification }) {
     { id: 'secondary', label: 'Secondary Gray', hex: '#2D2F36', locked: false, desc: 'Hover states & inputs' },
   ]);
 
-  // Apply theme to DOM on setting changes
+  // Every change is applied, cached locally, and saved to the server, so the
+  // chosen theme is still active when this page is opened again.
+  const persistedRef = useRef(JSON.stringify(settings));
+  const pendingRef = useRef(null);
+  const notifyRef = useRef(showNotification);
+  notifyRef.current = showNotification;
+
+  const persist = useCallback(async (next) => {
+    pendingRef.current = null;
+    setSaveState('saving');
+    try {
+      const merged = await saveCrmThemeSettings(next);
+      persistedRef.current = JSON.stringify(merged);
+      setSaveState('saved');
+      return true;
+    } catch (error) {
+      setSaveState('error');
+      notifyRef.current?.(error.message || 'CRM theme could not be saved.', 'error');
+      return false;
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleExternalChange = (event) => {
+      if (!event.detail || pendingRef.current) return;
+      const key = JSON.stringify(event.detail);
+      if (key === persistedRef.current) return;
+      persistedRef.current = key;
+      setSettings(event.detail);
+    };
+    window.addEventListener('cdx:crm-theme-changed', handleExternalChange);
+    return () => window.removeEventListener('cdx:crm-theme-changed', handleExternalChange);
+  }, []);
+
   useEffect(() => {
     applyCrmThemeToDom(settings);
-  }, [settings]);
+    if (JSON.stringify(settings) === persistedRef.current) return undefined;
+    cacheCrmThemeLocally(settings);
+    pendingRef.current = settings;
+    setSaveState('pending');
+    const timer = setTimeout(() => { void persist(settings); }, 500);
+    return () => clearTimeout(timer);
+  }, [settings, persist]);
+
+  useEffect(() => () => {
+    if (pendingRef.current) void persist(pendingRef.current);
+  }, [persist]);
 
   // Generate new harmonious palette (Coolors style)
   const handleGenerateHarmoniousPalette = useCallback(() => {
@@ -119,9 +164,8 @@ export default function CrmSettingsTab({ showNotification }) {
       if (p.id === 'secondary') return { ...p, hex: secondaryCol };
       return p;
     }));
-    setSaved(false);
     if (showNotification) {
-      showNotification('Applied generated palette to CRM. Click Save & Apply to persist.');
+      showNotification('Applied generated palette to CRM.');
     }
   };
 
@@ -141,7 +185,6 @@ export default function CrmSettingsTab({ showNotification }) {
       { id: 'glow', label: 'Accent Detail', hex: preset.accentHover || preset.accent, locked: false, desc: 'Active badges' },
       { id: 'secondary', label: 'Secondary Gray', hex: preset.cardHover || '#2D2F36', locked: false, desc: 'Hover & borders' },
     ]);
-    setSaved(false);
   };
 
   const handleAccentSelect = (hex) => {
@@ -152,24 +195,14 @@ export default function CrmSettingsTab({ showNotification }) {
     setPalettePillars((prev) =>
       prev.map((col) => (col.id === 'accent' ? { ...col, hex } : col))
     );
-    setSaved(false);
   };
 
   const handleSave = async () => {
-    try {
-      await saveCrmThemeSettings(settings);
-      setSaved(true);
-      showNotification?.('CRM theme saved for all staff.');
-    } catch (error) {
-      showNotification?.(error.message || 'CRM theme could not be saved.', 'error');
-    }
+    if (await persist(settings)) showNotification?.('CRM theme saved for all staff.');
   };
 
   const handleReset = () => {
     setSettings(DEFAULT_CRM_SETTINGS);
-    saveCrmThemeSettings(DEFAULT_CRM_SETTINGS).catch((error) => {
-      showNotification?.(error.message || 'CRM theme could not be reset.', 'error');
-    });
     setPalettePillars([
       { id: 'accent', label: 'Primary Accent', hex: '#0A84FF', locked: false, desc: 'Action buttons & pills' },
       { id: 'bg', label: 'Canvas Background', hex: '#16171B', locked: false, desc: 'Apple dark gray base' },
@@ -177,7 +210,6 @@ export default function CrmSettingsTab({ showNotification }) {
     { id: 'glow', label: 'Accent Detail', hex: '#64D2FF', locked: false, desc: 'Active badges' },
       { id: 'secondary', label: 'Secondary Gray', hex: '#2D2F36', locked: false, desc: 'Hover states & inputs' },
     ]);
-    setSaved(true);
     if (showNotification) {
       showNotification('CRM theme reset to Apple Space Gray default.');
     }
@@ -210,7 +242,7 @@ export default function CrmSettingsTab({ showNotification }) {
           </button>
           <button type="button" className="crm-btn-primary" onClick={handleSave} style={{ background: currentAccent, borderColor: currentAccent }}>
             {saved ? <Check size={14} /> : <Save size={14} />}
-            {saved ? 'Saved' : 'Save & Apply'}
+            {saved ? 'Saved' : saveState === 'error' ? 'Retry Save' : 'Saving…'}
           </button>
         </div>
       </header>
@@ -515,7 +547,6 @@ export default function CrmSettingsTab({ showNotification }) {
                 value={currentBg}
                 onChange={(e) => {
                   setSettings((prev) => ({ ...prev, customBg: e.target.value }));
-                  setSaved(false);
                 }}
                 className="crm-custom-accent-picker"
               />
@@ -524,7 +555,6 @@ export default function CrmSettingsTab({ showNotification }) {
                 value={currentBg}
                 onChange={(e) => {
                   setSettings((prev) => ({ ...prev, customBg: e.target.value }));
-                  setSaved(false);
                 }}
                 className="crm-settings-input"
                 style={{ width: 120, fontFamily: 'monospace' }}
@@ -561,7 +591,6 @@ export default function CrmSettingsTab({ showNotification }) {
                   className={settings.density === opt.id ? 'is-selected' : ''}
                   onClick={() => {
                     setSettings((prev) => ({ ...prev, density: opt.id }));
-                    setSaved(false);
                   }}
                 >
                   {opt.name}
@@ -587,7 +616,6 @@ export default function CrmSettingsTab({ showNotification }) {
                   className={settings.radius === opt.id ? 'is-selected' : ''}
                   onClick={() => {
                     setSettings((prev) => ({ ...prev, radius: opt.id }));
-                    setSaved(false);
                   }}
                 >
                   {opt.name.split(' ')[0]}

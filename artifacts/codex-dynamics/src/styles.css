@@ -890,3 +890,29 @@ html.tidio-chat-is-open .whatsapp-dock-container {
   box-shadow: none !important;
 }
 
+
+/* Client portal finish: system figures instead of monospace stats, softened
+   light surfaces, hairline separators and smoother controls. */
+.cdx-portal {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.cdx-portal .font-mono.tabular-nums {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+html:not(.dark) .cdx-portal .bg-white {
+  background-color: #fbfbfd;
+}
+html:not(.dark) .cdx-portal .bg-\[\#F5F5F7\] {
+  background-color: #eef0f3;
+}
+.cdx-portal :where(button, a, input, select, textarea) {
+  transition-property: color, background-color, border-color, box-shadow, opacity;
+  transition-duration: 0.18s;
+}
+.cdx-portal :where(input, select, textarea):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(0 113 227 / 0.25);
+}

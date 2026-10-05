@@ -8577,3 +8577,270 @@
 .crm-admin-app[data-crm-mode] .crm-dashboard-card {
   border: 1px solid var(--crm-border) !important;
 }
+
+/* ============================================================================
+   iOS finish layer: typography, materials, radii, separators and controls.
+   Visual-only (no spacing or sizing changes), driven by the --crm-* tokens so
+   every preset and both modes stay consistent.
+   ========================================================================== */
+.crm-admin-app[data-crm-mode] {
+  --crm-ios-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --crm-ios-radius-card: 14px;
+  --crm-ios-radius-control: 10px;
+  --crm-ios-hairline: color-mix(in srgb, var(--crm-text-primary) 11%, transparent);
+  --crm-ios-fill: color-mix(in srgb, var(--crm-text-primary) 6%, transparent);
+  --crm-ios-fill-strong: color-mix(in srgb, var(--crm-text-primary) 10%, transparent);
+  --crm-ios-focus: color-mix(in srgb, var(--crm-accent) 28%, transparent);
+  --crm-ios-red: #FF3B30;
+  --crm-ios-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.04), 0 2px 10px rgba(0, 0, 0, 0.04);
+  --crm-ios-shadow-raised: 0 1px 3px rgba(0, 0, 0, 0.10), 0 1px 1px rgba(0, 0, 0, 0.04);
+  --crm-ios-shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.22), 0 2px 8px rgba(0, 0, 0, 0.08);
+  font-family: var(--crm-ios-font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  background: var(--crm-bg);
+}
+.crm-admin-app[data-crm-mode="dark"] {
+  --crm-ios-red: #FF453A;
+  --crm-ios-shadow-card: none;
+  --crm-ios-shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.45);
+  --crm-ios-shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.55);
+}
+.crm-admin-app[data-crm-mode] :where(button, input, select, textarea) {
+  font-family: inherit;
+}
+.crm-admin-app[data-crm-mode] :where(code, pre, kbd, .crm-mono) {
+  font-family: var(--font-family-mono);
+}
+
+/* Headings: tighter tracking, iOS weights */
+.crm-admin-app[data-crm-mode] :where(h1, h2, h3, h4) {
+  letter-spacing: -0.02em;
+  font-weight: 650;
+  color: var(--crm-text-primary);
+}
+.crm-admin-app[data-crm-mode] :where(h5, h6, label, .crm-label) {
+  letter-spacing: -0.005em;
+}
+
+/* Top bar: translucent material with a hairline separator */
+.crm-admin-app[data-crm-mode].crm-admin-app .crm-topbar {
+  background: color-mix(in srgb, var(--crm-card) 82%, transparent) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--crm-ios-hairline) !important;
+  box-shadow: none !important;
+}
+.crm-admin-app[data-crm-mode] .crm-brand-mark {
+  border-radius: 9px !important;
+  box-shadow: var(--crm-ios-shadow-raised);
+}
+
+/* Grouped cards */
+.crm-admin-app[data-crm-mode] :is(
+  .crm-super-admin-header,
+  .crm-super-admin-card,
+  .crm-card,
+  .crm-dashboard-card,
+  .crm-settings-panel,
+  .crm-ios-card,
+  .crm-role-panel-header
+) {
+  border-radius: var(--crm-ios-radius-card) !important;
+  border-color: var(--crm-ios-hairline) !important;
+  box-shadow: var(--crm-ios-shadow-card) !important;
+}
+
+/* Segmented controls (main tabs, sub tabs, studio tabs) */
+.crm-admin-app[data-crm-mode] :is(.crm-super-admin-tabs, .crm-studio-segmented-tabs, .crm-ios-segmented) {
+  background: var(--crm-ios-fill) !important;
+  border: 1px solid transparent !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+}
+.crm-admin-app[data-crm-mode] :is(.crm-super-admin-tab-btn, .crm-tab-btn) {
+  border-radius: 9px !important;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+.crm-admin-app[data-crm-mode] :is(.crm-super-admin-tab-btn, .crm-tab-btn).crm-active {
+  background: var(--crm-card) !important;
+  color: var(--crm-text-primary) !important;
+  border-color: transparent !important;
+  box-shadow: var(--crm-ios-shadow-raised) !important;
+  font-weight: 600;
+}
+.crm-admin-app[data-crm-mode] :is(.crm-super-admin-tab-btn, .crm-tab-btn):not(.crm-active):hover {
+  background: var(--crm-ios-fill) !important;
+  color: var(--crm-text-primary) !important;
+}
+
+/* Buttons */
+.crm-admin-app[data-crm-mode] :is(
+  .crm-super-admin-btn,
+  .crm-super-admin-btn-small,
+  .crm-btn-primary,
+  .crm-btn-secondary,
+  .crm-super-admin-btn-secondary,
+  .crm-small-btn,
+  .crm-action-btn,
+  .crm-pagination-btn-gold,
+  .crm-proj-action-btn,
+  .crm-post-comment-btn
+) {
+  border-radius: var(--crm-ios-radius-control) !important;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  background-image: none !important;
+  box-shadow: none !important;
+  transition: background-color 0.18s ease, color 0.18s ease, filter 0.18s ease, transform 0.12s ease;
+}
+.crm-admin-app[data-crm-mode] :is(.crm-super-admin-btn, .crm-btn-primary, .crm-super-admin-btn-small):not(:disabled):hover {
+  filter: brightness(1.06);
+  transform: none;
+}
+.crm-admin-app[data-crm-mode] :is(
+  .crm-super-admin-btn,
+  .crm-super-admin-btn-small,
+  .crm-btn-primary,
+  .crm-btn-secondary,
+  .crm-super-admin-btn-secondary,
+  .crm-small-btn,
+  .crm-action-btn
+):not(:disabled):active {
+  transform: scale(0.98);
+}
+.crm-admin-app[data-crm-mode] :is(.crm-btn-secondary, .crm-super-admin-btn-secondary) {
+  background: var(--crm-ios-fill) !important;
+  color: var(--crm-text-primary) !important;
+  border-color: transparent !important;
+}
+.crm-admin-app[data-crm-mode] :is(.crm-btn-secondary, .crm-super-admin-btn-secondary):not(:disabled):hover {
+  background: var(--crm-ios-fill-strong) !important;
+}
+.crm-admin-app[data-crm-mode] :is(button, [role="button"], a):focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 3px var(--crm-ios-focus) !important;
+}
+.crm-admin-app[data-crm-mode] :is(button):disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Destructive logout: tinted, like iOS destructive buttons */
+.crm-admin-app[data-crm-mode] .crm-logout-btn {
+  background: color-mix(in srgb, var(--crm-ios-red) 12%, transparent) !important;
+  color: var(--crm-ios-red) !important;
+  border: 1px solid transparent !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+  font-weight: 600;
+}
+.crm-admin-app[data-crm-mode] .crm-logout-btn:hover {
+  background: color-mix(in srgb, var(--crm-ios-red) 18%, transparent) !important;
+}
+.crm-admin-app[data-crm-mode] .crm-logout-btn :is(.crm-logout-icon, .crm-logout-label, svg) {
+  color: inherit !important;
+}
+.crm-admin-app[data-crm-mode] .crm-user-chip {
+  background: var(--crm-ios-fill) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Inputs */
+.crm-admin-app[data-crm-mode] :is(
+  .crm-super-admin-input,
+  .crm-super-admin-select,
+  .crm-settings-input,
+  .crm-settings-select,
+  .crm-input,
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="date"],
+  select,
+  textarea
+):not(.crm-coolors-hex-input) {
+  border-radius: var(--crm-ios-radius-control) !important;
+  border: 1px solid var(--crm-ios-hairline) !important;
+  background-color: var(--crm-input-bg) !important;
+  color: var(--crm-text-primary) !important;
+  box-shadow: none !important;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.crm-admin-app[data-crm-mode] :is(input, select, textarea):not(.crm-coolors-hex-input):focus {
+  outline: none !important;
+  border-color: var(--crm-accent) !important;
+  box-shadow: 0 0 0 3px var(--crm-ios-focus) !important;
+}
+
+/* Tables: grouped list styling with hairline separators */
+.crm-admin-app[data-crm-mode] :is(.crm-super-admin-table-wrapper, .crm-admin-table-container) {
+  border-radius: 12px !important;
+  border-color: var(--crm-ios-hairline) !important;
+  box-shadow: none !important;
+}
+.crm-admin-app[data-crm-mode] :is(.crm-super-admin-table, .crm-admin-table, table.crm-table) th {
+  color: var(--crm-text-secondary) !important;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--crm-ios-hairline) !important;
+}
+.crm-admin-app[data-crm-mode] :is(.crm-super-admin-table, .crm-admin-table, table.crm-table) td {
+  border-bottom: 1px solid var(--crm-ios-hairline) !important;
+}
+.crm-admin-app[data-crm-mode] :is(.crm-super-admin-table, .crm-admin-table, table.crm-table) tr:last-child td {
+  border-bottom-color: transparent !important;
+}
+.crm-admin-app[data-crm-mode] :is(.crm-super-admin-table, .crm-admin-table, table.crm-table) tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+/* Pills and badges */
+.crm-admin-app[data-crm-mode] :is(.crm-status-pill, .crm-badge, .crm-tab-pending-badge, .crm-brand-tag) {
+  border-radius: 999px !important;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* Modals: sheet-like surfaces */
+.crm-admin-app[data-crm-mode] .crm-modal-overlay,
+.crm-modal-overlay {
+  background: rgba(0, 0, 0, 0.32) !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.crm-admin-app[data-crm-mode] .crm-modal-content {
+  border-radius: 16px !important;
+  border: 1px solid var(--crm-ios-hairline) !important;
+  box-shadow: var(--crm-ios-shadow-modal) !important;
+}
+.crm-admin-app[data-crm-mode] .crm-modal-header {
+  border-bottom-color: var(--crm-ios-hairline) !important;
+}
+.crm-admin-app[data-crm-mode] :is(.crm-modal-close-btn, .crm-icon-btn) {
+  border-radius: 999px !important;
+}
+
+/* Toggle switch: iOS green */
+.crm-admin-app[data-crm-mode] .crm-toggle-slider {
+  border-radius: 999px !important;
+}
+.crm-admin-app[data-crm-mode] input:checked + .crm-toggle-slider {
+  background-color: #34C759 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crm-admin-app[data-crm-mode] * {
+    transition: none !important;
+  }
+}
