@@ -2205,10 +2205,10 @@ export default function SiteSettingsTab({ showNotification = () => {}, initialSu
                     <div className="crm-ios-inset-box">
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
                         <div>
-                          <div style={{ fontSize: 13, fontWeight: 600, color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--crm-text-primary)', display: 'flex', alignItems: 'center', gap: 6 }}>
                             <Palette size={15} color="var(--crm-accent)" /> Global Theme Mode
                           </div>
-                          <div style={{ fontSize: 11.5, color: '#98989D', marginTop: 2 }}>
+                          <div style={{ fontSize: 11.5, color: 'var(--crm-text-secondary)', marginTop: 2 }}>
                             Instant switch between Apple Light and Luxury Dark aesthetic.
                           </div>
                         </div>
@@ -2533,7 +2533,7 @@ export default function SiteSettingsTab({ showNotification = () => {}, initialSu
                     <div className="crm-coolors-interactive-stage">
                       <div className="crm-coolors-stage-head">
                         <div>
-                          <div style={{ fontSize: 13, fontWeight: 700, color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: 7 }}>
+                          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--crm-text-primary)', display: 'flex', alignItems: 'center', gap: 7 }}>
                             <Dices size={16} color="var(--crm-accent)" />
                             Coolors Interactive Color Studio
                           </div>
@@ -2621,7 +2621,7 @@ export default function SiteSettingsTab({ showNotification = () => {}, initialSu
                           </button>
                         </div>
 
-                        <label style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#98989D', cursor: 'pointer', userSelect: 'none' }}>
+                        <label style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--crm-text-secondary)', cursor: 'pointer', userSelect: 'none' }}>
                           <input
                             type="checkbox"
                             checked={coolorsAutoApply}
@@ -2860,7 +2860,7 @@ export default function SiteSettingsTab({ showNotification = () => {}, initialSu
                 {expandedSections.hero && (
                   <div className="crm-ios-card-body">
                     <div className="crm-ios-inset-box">
-                      <div style={{ fontSize: 11.5, fontWeight: 600, color: '#C4C9D3', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      <div style={{ fontSize: 11.5, fontWeight: 600, color: 'var(--crm-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                         Hero Opening Block Structure
                       </div>
                       <div className="crm-ios-tiles-grid">
@@ -2882,7 +2882,7 @@ export default function SiteSettingsTab({ showNotification = () => {}, initialSu
                     </div>
 
                     <div className="crm-ios-inset-box">
-                      <div style={{ fontSize: 11.5, fontWeight: 600, color: '#C4C9D3', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      <div style={{ fontSize: 11.5, fontWeight: 600, color: 'var(--crm-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                         Header Navigation Style
                       </div>
                       <div className="crm-ios-stack-options">
@@ -3071,11 +3071,11 @@ export default function SiteSettingsTab({ showNotification = () => {}, initialSu
                     <div className="crm-ios-inset-box">
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                         <div>
-                          <div style={{ fontSize: 13, fontWeight: 600, color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: 7 }}>
+                          <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--crm-text-primary)', display: 'flex', alignItems: 'center', gap: 7 }}>
                             <WhatsAppLogo width={18} height={18} />
                             Floating WhatsApp Quick-Contact Dock
                           </div>
-                          <div style={{ fontSize: 11.5, color: '#98989D', marginTop: 2 }}>
+                          <div style={{ fontSize: 11.5, color: 'var(--crm-text-secondary)', marginTop: 2 }}>
                             Persistent bottom-corner button with instant pre-filled chat greeting.
                           </div>
                         </div>

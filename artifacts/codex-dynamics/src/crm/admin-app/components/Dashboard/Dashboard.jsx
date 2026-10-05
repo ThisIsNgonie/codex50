@@ -27,7 +27,7 @@ const KpiCard = ({ label, value, sub, accent = 'var(--crm-accent)', icon }) => (
   <div className="crm-dashboard-card" style={{ position: 'relative', overflow: 'hidden' }}>
     <div style={{ position: 'absolute', top: 0, left: 0, width: 3, height: '100%', background: accent, opacity: 0.85 }} />
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
-      <div style={{ fontSize: 12, color: '#8B94A3', fontWeight: 500, letterSpacing: 0.2 }}>{label}</div>
+      <div style={{ fontSize: 12, color: 'var(--crm-text-secondary)', fontWeight: 500, letterSpacing: 0.2 }}>{label}</div>
       <div style={{ width: 26, height: 26, borderRadius: 7, background: `${accent}1F`, color: accent, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 13 }}>{icon}</div>
     </div>
     <div style={{ fontSize: 24, fontWeight: 700, color: 'var(--crm-text-primary)', letterSpacing: '-0.02em' }}>{value}</div>
@@ -44,7 +44,7 @@ const DonutChart = ({ data, size = 180, thickness = 26 }) => {
   let offset = 0;
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      <circle cx={cx} cy={cy} r={radius} fill="none" stroke="#2B3139" strokeWidth={thickness} />
+      <circle cx={cx} cy={cy} r={radius} fill="none" style={{ stroke: 'var(--crm-border)' }} strokeWidth={thickness} />
       {data.map((d, i) => {
         const frac = d.value / total;
         const dash = frac * circumference;
@@ -56,7 +56,7 @@ const DonutChart = ({ data, size = 180, thickness = 26 }) => {
             cy={cy}
             r={radius}
             fill="none"
-            stroke={d.color}
+            style={{ stroke: d.color }}
             strokeWidth={thickness}
             strokeDasharray={`${dash} ${gap}`}
             strokeDashoffset={-offset}
@@ -68,7 +68,7 @@ const DonutChart = ({ data, size = 180, thickness = 26 }) => {
         return seg;
       })}
       <text x={cx} y={cy - 4} textAnchor="middle" fontSize="22" fontWeight="700" fill="var(--crm-text-primary)">{fmt(total)}</text>
-      <text x={cx} y={cy + 16} textAnchor="middle" fontSize="11" fill="#8B94A3">Leads</text>
+      <text x={cx} y={cy + 16} textAnchor="middle" fontSize="11" style={{ fill: 'var(--crm-text-secondary)' }}>Leads</text>
     </svg>
   );
 };
@@ -79,9 +79,9 @@ const HBar = ({ label, value, max, color = 'var(--crm-accent)', valueLabel }) =>
     <div style={{ marginBottom: 10 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12, color: '#C8CDD6', marginBottom: 5 }}>
         <span style={{ fontWeight: 500 }}>{label}</span>
-        <span style={{ color: '#8B94A3', fontVariantNumeric: 'tabular-nums' }}>{valueLabel ?? fmt(value)}</span>
+        <span style={{ color: 'var(--crm-text-secondary)', fontVariantNumeric: 'tabular-nums' }}>{valueLabel ?? fmt(value)}</span>
       </div>
-      <div style={{ height: 8, background: '#2B3139', borderRadius: 4, overflow: 'hidden' }}>
+      <div style={{ height: 8, background: 'var(--crm-card-hover)', borderRadius: 4, overflow: 'hidden' }}>
         <div style={{ width: `${pct}%`, height: '100%', background: `linear-gradient(90deg, ${color}AA, ${color})`, borderRadius: 4, transition: 'width 0.3s ease' }} />
       </div>
     </div>
@@ -109,7 +109,7 @@ const Sparkline = ({ points, width = 600, height = 120, color = 'var(--crm-accen
         </linearGradient>
       </defs>
       {[0.25, 0.5, 0.75].map((g) => (
-        <line key={g} x1="0" x2={width} y1={(height - 16) * g + 4} y2={(height - 16) * g + 4} stroke="#2B3139" strokeDasharray="3 4" />
+        <line key={g} x1="0" x2={width} y1={(height - 16) * g + 4} y2={(height - 16) * g + 4} style={{ stroke: 'var(--crm-border)' }} strokeDasharray="3 4" />
       ))}
       <path d={area} fill="url(#spark-fill)" />
       <path d={path} fill="none" stroke={color} strokeWidth="2" />
@@ -125,7 +125,7 @@ const Sparkline = ({ points, width = 600, height = 120, color = 'var(--crm-accen
           </text>
         ) : null,
       )}
-      {label && <text x="6" y="12" fontSize="10" fill="#8B94A3">{label}</text>}
+      {label && <text x="6" y="12" fontSize="10" style={{ fill: 'var(--crm-text-secondary)' }}>{label}</text>}
     </svg>
   );
 };
@@ -223,13 +223,13 @@ const Dashboard = ({ offices = [], teams = [], staffUsers = [] }) => {
         <div className="crm-dashboard-card">
           <h3 style={{ marginTop: 0 }}>[status] Lead Status Distribution</h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-            <DonutChart data={statusBreakdown.length ? statusBreakdown : [{ name: 'No data', value: 1, color: '#2B3139' }]} />
+            <DonutChart data={statusBreakdown.length ? statusBreakdown : [{ name: 'No data', value: 1, color: 'var(--crm-card-hover)' }]} />
             <div style={{ flex: 1, minWidth: 140, maxHeight: 200, overflowY: 'auto' }}>
               {statusBreakdown.slice(0, 8).map((s) => (
                 <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#C8CDD6', marginBottom: 6 }}>
                   <span style={{ width: 10, height: 10, borderRadius: 3, background: s.color, flexShrink: 0 }} />
                   <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.name}</span>
-                  <span style={{ color: '#8B94A3', fontVariantNumeric: 'tabular-nums' }}>{fmt(s.value)}</span>
+                  <span style={{ color: 'var(--crm-text-secondary)', fontVariantNumeric: 'tabular-nums' }}>{fmt(s.value)}</span>
                 </div>
               ))}
             </div>
@@ -239,7 +239,7 @@ const Dashboard = ({ offices = [], teams = [], staffUsers = [] }) => {
         <div className="crm-dashboard-card lg:col-span-2">
           <h3 style={{ marginTop: 0 }}>[office] Office Performance</h3>
           <div style={{ marginTop: 8 }}>
-            {officePerformance.length === 0 && <div style={{ color: '#8B94A3', fontSize: 12 }}>No offices yet.</div>}
+            {officePerformance.length === 0 && <div style={{ color: 'var(--crm-text-secondary)', fontSize: 12 }}>No offices yet.</div>}
             {officePerformance.map((o) => (
               <HBar
                 key={o.id}
@@ -265,12 +265,12 @@ const Dashboard = ({ offices = [], teams = [], staffUsers = [] }) => {
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5 }}>
               <thead>
-                <tr style={{ color: '#8B94A3', textAlign: 'left' }}>
-                  <th style={{ padding: '8px 6px', borderBottom: '1px solid #2B3139', fontWeight: 500 }}>Team</th>
-                  <th style={{ padding: '8px 6px', borderBottom: '1px solid #2B3139', fontWeight: 500 }}>Office</th>
-                  <th style={{ padding: '8px 6px', borderBottom: '1px solid #2B3139', fontWeight: 500, textAlign: 'right' }}>Leads</th>
-                  <th style={{ padding: '8px 6px', borderBottom: '1px solid #2B3139', fontWeight: 500, textAlign: 'right' }}>Converted</th>
-                  <th style={{ padding: '8px 6px', borderBottom: '1px solid #2B3139', fontWeight: 500, textAlign: 'right' }}>Conv.</th>
+                <tr style={{ color: 'var(--crm-text-secondary)', textAlign: 'left' }}>
+                  <th style={{ padding: '8px 6px', borderBottom: '1px solid var(--crm-border)', fontWeight: 500 }}>Team</th>
+                  <th style={{ padding: '8px 6px', borderBottom: '1px solid var(--crm-border)', fontWeight: 500 }}>Office</th>
+                  <th style={{ padding: '8px 6px', borderBottom: '1px solid var(--crm-border)', fontWeight: 500, textAlign: 'right' }}>Leads</th>
+                  <th style={{ padding: '8px 6px', borderBottom: '1px solid var(--crm-border)', fontWeight: 500, textAlign: 'right' }}>Converted</th>
+                  <th style={{ padding: '8px 6px', borderBottom: '1px solid var(--crm-border)', fontWeight: 500, textAlign: 'right' }}>Conv.</th>
                 </tr>
               </thead>
               <tbody>
@@ -284,7 +284,7 @@ const Dashboard = ({ offices = [], teams = [], staffUsers = [] }) => {
                   </tr>
                 ))}
                 {topTeams.length === 0 && (
-                  <tr><td colSpan={5} style={{ padding: '14px 6px', color: '#8B94A3', textAlign: 'center' }}>No teams yet.</td></tr>
+                  <tr><td colSpan={5} style={{ padding: '14px 6px', color: 'var(--crm-text-secondary)', textAlign: 'center' }}>No teams yet.</td></tr>
                 )}
               </tbody>
             </table>
@@ -295,7 +295,7 @@ const Dashboard = ({ offices = [], teams = [], staffUsers = [] }) => {
           <h3 style={{ marginTop: 0 }}>[users] Online Leads</h3>
           <div className="crm-activity-feed">
             {onlineLeads.length === 0 && (
-              <div style={{ color: '#8B94A3', fontSize: 12, padding: '8px 0' }}>No leads currently online.</div>
+              <div style={{ color: 'var(--crm-text-secondary)', fontSize: 12, padding: '8px 0' }}>No leads currently online.</div>
             )}
             {onlineLeads.map((lead) => (
               <div className="crm-activity-item" key={lead.id}>
@@ -317,7 +317,7 @@ const Dashboard = ({ offices = [], teams = [], staffUsers = [] }) => {
         <h3 style={{ marginTop: 0 }}>[list] Recent Activity</h3>
         <div className="crm-activity-feed">
           {recentActivity.length === 0 && (
-            <div style={{ color: '#8B94A3', fontSize: 12, padding: '8px 0' }}>No recent activity recorded.</div>
+            <div style={{ color: 'var(--crm-text-secondary)', fontSize: 12, padding: '8px 0' }}>No recent activity recorded.</div>
           )}
           {recentActivity.map((item, index) => {
             const lead = leads.find((l) => l.id === item.userId);

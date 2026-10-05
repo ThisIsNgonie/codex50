@@ -190,7 +190,7 @@ function AdminBrand() {
   );
 }
 
-function RolePage({ data, dataLoading, role, setLeadAssignment, assignOfficeManager, createOfficeWithManager, assignTeamLeader, createTeamLeader, createStandaloneTeamLeader, createAgent, assignAgent, toggleStaffBlocked, setData, setUserLoginState, updateLead, createLead, showNotification }) {
+function RolePage({ data, dataLoading, role, setLeadAssignment, assignOfficeManager, createOfficeWithManager, createStandaloneOfficeManager, assignTeamLeader, createTeamLeader, createStandaloneTeamLeader, createAgent, assignAgent, toggleStaffBlocked, setData, setUserLoginState, updateLead, createLead, showNotification }) {
   const { userId } = useParams();
   const user = data.users.find((u) => u.id === userId);
   const [canCreateAgent, setCanCreateAgent] = useState(false);
@@ -200,8 +200,9 @@ function RolePage({ data, dataLoading, role, setLeadAssignment, assignOfficeMana
       setCanCreateAgent(false);
       return;
     }
-    setCanCreateAgent(true);
-  }, [role, user?.id]);
+    // Agents created by a Team Leader join that leader's team.
+    setCanCreateAgent(Boolean(user?.teamId));
+  }, [role, user?.id, user?.teamId]);
 
   if (!user) {
     if (dataLoading) {
@@ -277,7 +278,7 @@ function RolePage({ data, dataLoading, role, setLeadAssignment, assignOfficeMana
               path=""
               element={(
                 <>
-                  {role === ROLE.SUPER_ADMIN && <SuperAdminPanel data={data} currentUser={user} setData={setData} assignOfficeManager={assignOfficeManager} createOfficeWithManager={createOfficeWithManager} createTeamLeader={createTeamLeader} createStandaloneTeamLeader={createStandaloneTeamLeader} createAgent={createAgent} toggleStaffBlocked={toggleStaffBlocked} setLeadAssignment={setLeadAssignment} setUserLoginState={setUserLoginState} createLead={createLead} showNotification={showNotification} />}
+                  {role === ROLE.SUPER_ADMIN && <SuperAdminPanel data={data} currentUser={user} setData={setData} assignOfficeManager={assignOfficeManager} createOfficeWithManager={createOfficeWithManager} createStandaloneOfficeManager={createStandaloneOfficeManager} createTeamLeader={createTeamLeader} createStandaloneTeamLeader={createStandaloneTeamLeader} createAgent={createAgent} toggleStaffBlocked={toggleStaffBlocked} setLeadAssignment={setLeadAssignment} setUserLoginState={setUserLoginState} createLead={createLead} showNotification={showNotification} />}
                   {role === ROLE.OFFICE_MANAGER && <OfficeManagerPanel data={data} setData={setData} currentUser={user} assignTeamLeader={assignTeamLeader} createTeamLeader={createTeamLeader} createAgent={createAgent} toggleStaffBlocked={toggleStaffBlocked} setLeadAssignment={setLeadAssignment} updateLead={updateLead} createLead={createLead} setUserLoginState={setUserLoginState} showNotification={showNotification} />}
                   {role === ROLE.TEAM_LEADER && <TeamLeaderPanel data={data} setData={setData} currentUser={user} createAgent={createAgent} canCreateAgent={canCreateAgent} toggleStaffBlocked={toggleStaffBlocked} setLeadAssignment={setLeadAssignment} updateLead={updateLead} createLead={createLead} setUserLoginState={setUserLoginState} showNotification={showNotification} />}
                   {role === ROLE.AGENT && <AgentPanel data={data} currentUser={user} setData={setData} setUserLoginState={setUserLoginState} createLead={createLead} showNotification={showNotification} />}
@@ -808,7 +809,7 @@ function App() {
     } catch (error) {
       console.error('[App] createOfficeWithManager failed', error);
       showNotification(error.message || 'Could not create office.');
-      return null;
+      return undefined;
     }
   };
 
@@ -889,6 +890,36 @@ function App() {
     } catch (error) {
       console.error('[App] createTeamLeader failed', error);
       showNotification(error.message || 'Could not create team.');
+      return undefined;
+    }
+  };
+
+  const createStandaloneOfficeManager = async (managerName, managerPassword) => {
+    try {
+      const created = await createStaffApi({
+        role: ROLE.OFFICE_MANAGER,
+        officeId: null,
+        teamId: null,
+        name: managerName,
+        password: managerPassword,
+      });
+      const manager = {
+        id: created.id,
+        name: created.name,
+        email: created.email,
+        role: ROLE.OFFICE_MANAGER,
+        officeId: null,
+        teamId: null,
+        password: managerPassword || null,
+        loginLink: makeLoginLink(created.id, ROLE.OFFICE_MANAGER),
+        isLoggedIn: false,
+        lastLoginAt: null,
+      };
+      setData((prev) => ({ ...prev, users: [...prev.users, manager] }));
+      return manager;
+    } catch (error) {
+      console.error('[App] createStandaloneOfficeManager failed', error);
+      showNotification(error.message || 'Could not create office manager.');
       return null;
     }
   };
@@ -932,7 +963,7 @@ function App() {
     const team = teamId ? data.teams.find((t) => t.id === teamId) : null;
     if (teamId && !team) return null;
     const currentCount = team ? getTeamAgentCount(teamId, data.users) : 0;
-    if (team && currentCount >= (team.maxSize || 0)) {
+    if (team && team.maxSize != null && currentCount >= team.maxSize) {
       showNotification(`Team ${team.name} is at capacity.`);
       return null;
     }
@@ -1172,8 +1203,8 @@ function App() {
           <Route path="staff-login" element={<StaffLogin onAdminLogin={addAdminToData} />} />
           <Route path="admin/staff-login" element={<StaffLogin onAdminLogin={addAdminToData} />} />
 
-          <Route path="super-admin/:userId/*" element={<RolePage role={ROLE.SUPER_ADMIN} data={data} dataLoading={dataLoading} setData={setData} setLeadAssignment={setLeadAssignment} assignOfficeManager={assignOfficeManager} createOfficeWithManager={createOfficeWithManager} createTeamLeader={createTeamLeader} createStandaloneTeamLeader={createStandaloneTeamLeader} createAgent={createAgent} toggleStaffBlocked={toggleStaffBlocked} setUserLoginState={setUserLoginState} updateLead={updateLead} createLead={createLead} showNotification={showNotification} />} />
-          <Route path="admin/super-admin/:userId/*" element={<RolePage role={ROLE.SUPER_ADMIN} data={data} dataLoading={dataLoading} setData={setData} setLeadAssignment={setLeadAssignment} assignOfficeManager={assignOfficeManager} createOfficeWithManager={createOfficeWithManager} createTeamLeader={createTeamLeader} createStandaloneTeamLeader={createStandaloneTeamLeader} createAgent={createAgent} toggleStaffBlocked={toggleStaffBlocked} setUserLoginState={setUserLoginState} updateLead={updateLead} createLead={createLead} showNotification={showNotification} />} />
+          <Route path="super-admin/:userId/*" element={<RolePage role={ROLE.SUPER_ADMIN} data={data} dataLoading={dataLoading} setData={setData} setLeadAssignment={setLeadAssignment} assignOfficeManager={assignOfficeManager} createOfficeWithManager={createOfficeWithManager} createStandaloneOfficeManager={createStandaloneOfficeManager} createTeamLeader={createTeamLeader} createStandaloneTeamLeader={createStandaloneTeamLeader} createAgent={createAgent} toggleStaffBlocked={toggleStaffBlocked} setUserLoginState={setUserLoginState} updateLead={updateLead} createLead={createLead} showNotification={showNotification} />} />
+          <Route path="admin/super-admin/:userId/*" element={<RolePage role={ROLE.SUPER_ADMIN} data={data} dataLoading={dataLoading} setData={setData} setLeadAssignment={setLeadAssignment} assignOfficeManager={assignOfficeManager} createOfficeWithManager={createOfficeWithManager} createStandaloneOfficeManager={createStandaloneOfficeManager} createTeamLeader={createTeamLeader} createStandaloneTeamLeader={createStandaloneTeamLeader} createAgent={createAgent} toggleStaffBlocked={toggleStaffBlocked} setUserLoginState={setUserLoginState} updateLead={updateLead} createLead={createLead} showNotification={showNotification} />} />
 
           <Route path="office-manager/:userId/*" element={<RolePage role={ROLE.OFFICE_MANAGER} data={data} dataLoading={dataLoading} setData={setData} setLeadAssignment={setLeadAssignment} assignTeamLeader={assignTeamLeader} createTeamLeader={createTeamLeader} createAgent={createAgent} toggleStaffBlocked={toggleStaffBlocked} updateLead={updateLead} createLead={createLead} setUserLoginState={setUserLoginState} showNotification={showNotification} />} />
           <Route path="admin/office-manager/:userId/*" element={<RolePage role={ROLE.OFFICE_MANAGER} data={data} dataLoading={dataLoading} setData={setData} setLeadAssignment={setLeadAssignment} assignTeamLeader={assignTeamLeader} createTeamLeader={createTeamLeader} createAgent={createAgent} toggleStaffBlocked={toggleStaffBlocked} updateLead={updateLead} createLead={createLead} setUserLoginState={setUserLoginState} showNotification={showNotification} />} />

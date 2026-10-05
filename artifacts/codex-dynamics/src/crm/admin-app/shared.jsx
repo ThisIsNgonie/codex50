@@ -448,7 +448,7 @@ export class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{ padding: 30, color: '#fff', background: 'var(--crm-bg)', minHeight: '100vh' }}>
+        <div style={{ padding: 30, color: 'var(--crm-text-primary)', background: 'var(--crm-bg)', minHeight: '100vh' }}>
           <h1>Something went wrong</h1>
           <p>{this.state.error?.message || 'Unexpected error.'}</p>
           <p>Check console for details.</p>

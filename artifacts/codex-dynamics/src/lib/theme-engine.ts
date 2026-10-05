@@ -200,12 +200,14 @@ export function buildThemeStyle(config: SiteConfig, mode?: "light" | "dark"): CS
   const leading = t?.lineHeight;
   const cw = t?.containerWidth || "1280px";
   const fitsMode = (color?: string) => Boolean(color) && isDarkHex(color) === isDark;
-  const bg = fitsMode(c.background)
+  // Pure-white canvases glare in light mode; swap them for the soft defaults.
+  const isGlaringWhite = (color?: string) => !isDark && /^#?(f{3}|f{6}|fefefe|fdfdfd|fcfcfc|fbfbfb|fafafa)$/i.test((color || "").trim());
+  const bg = fitsMode(c.background) && !isGlaringWhite(c.background)
     ? c.background!
-    : isDark ? "#1c1c1e" : "#f5f5f7";
-  const cardBg = fitsMode(c.cardBg)
+    : isDark ? "#1c1c1e" : "#eef0f3";
+  const cardBg = fitsMode(c.cardBg) && !isGlaringWhite(c.cardBg)
     ? c.cardBg!
-    : isDark ? "#242426" : "#ffffff";
+    : isDark ? "#242426" : "#f8f9fb";
   const textMain = c.textMain && isDarkHex(c.textMain) !== isDark
     ? c.textMain
     : isDark ? "#f5f5f7" : "#1d1d1f";
@@ -213,12 +215,12 @@ export function buildThemeStyle(config: SiteConfig, mode?: "light" | "dark"): CS
   const border = isDark ? "#444448" : "#c6c6cc";
   const hairline = isDark ? "rgba(255, 255, 255, 0.16)" : "rgba(29, 29, 31, 0.14)";
   const hairlineOnDark = "rgba(255, 255, 255, 0.18)";
-  const fill = isDark ? "#222224" : "#f2f2f7";
-  const fillElevated = isDark ? "#2c2c2e" : "#ffffff";
-  const mutedBg = isDark ? "#2c2c2e" : "#e8e8ed";
+  const fill = isDark ? "#222224" : "#e9ebef";
+  const fillElevated = isDark ? "#2c2c2e" : "#f8f9fb";
+  const mutedBg = isDark ? "#2c2c2e" : "#e2e4e9";
   const secondary = fitsMode(c.secondary) ? c.secondary! : fill;
-  const surface = fitsMode(c.surface) ? c.surface! : cardBg;
-  const input = isDark ? "#1c1c1e" : "#ffffff";
+  const surface = fitsMode(c.surface) && !isGlaringWhite(c.surface) ? c.surface! : cardBg;
+  const input = isDark ? "#1c1c1e" : "#fbfbfc";
   const primary = c.primary || "#0071e3";
   const accent = c.accent || primary;
   const primaryForeground = isDarkHex(primary) ? "#ffffff" : "#1d1d1f";

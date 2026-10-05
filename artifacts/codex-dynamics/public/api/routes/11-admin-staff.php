@@ -32,7 +32,6 @@ if ($apiPath === '/admin/staff') {
             if (!in_array($role, ['Team Leader', 'Agent'], true)) jsonResponse(['ok' => false, 'error' => 'Office Managers can only create Team Leaders and Agents.'], 403);
             $officeId = optionalId($actor['office_id'] ?? null);
             if ($officeId === null) jsonResponse(['ok' => false, 'error' => 'Your account is not assigned to an office.'], 403);
-            if ($role === 'Team Leader' && $teamId === null) jsonResponse(['ok' => false, 'error' => 'Office Managers must assign a Team Leader to a team.'], 422);
         } elseif ($actor['role'] === 'Team Leader') {
             if ($role !== 'Agent' || empty($actor['team_id']) || $teamId !== $actor['team_id'] || (($actor['capabilities']['create_agent'] ?? true) === false)) {
                 jsonResponse(['ok' => false, 'error' => 'You can only create agents in your team.'], 403);
@@ -49,7 +48,7 @@ if ($apiPath === '/admin/staff') {
             $officeId = (string)$team['office_id'];
         }
         if ($officeId !== null && !activeOffice($pdo, $officeId)) jsonResponse(['ok' => false, 'error' => 'The selected office is unavailable.'], 422);
-        if ($role === 'Office Manager' && ($officeId === null || $teamId !== null)) jsonResponse(['ok' => false, 'error' => 'An Office Manager must be assigned to one active office and no team.'], 422);
+        if ($role === 'Office Manager' && $teamId !== null) jsonResponse(['ok' => false, 'error' => 'An Office Manager cannot be assigned to a team.'], 422);
         if ($role === 'Team Leader' && $teamId !== null) {
             $q = $pdo->prepare("SELECT id FROM staff_users WHERE team_id = ? AND role = 'Team Leader' AND deleted_at IS NULL");
             $q->execute([$teamId]);
@@ -70,7 +69,7 @@ if ($apiPath === '/admin/staff') {
         $q = $pdo->prepare('SELECT id FROM staff_users WHERE LOWER(email) = ?');
         $q->execute([$email]);
         if ($q->fetchColumn()) jsonResponse(['ok' => false, 'error' => 'That email address is already in use.'], 409);
-        if ($role === 'Office Manager') {
+        if ($role === 'Office Manager' && $officeId !== null) {
             $q = $pdo->prepare('SELECT id FROM offices WHERE id = ? AND manager_id IS NOT NULL AND deleted_at IS NULL');
             $q->execute([$officeId]);
             if ($q->fetchColumn()) jsonResponse(['ok' => false, 'error' => 'This office already has an Office Manager.'], 409);
@@ -86,7 +85,7 @@ if ($apiPath === '/admin/staff') {
             if ($role === 'Team Leader' && $teamId !== null) {
                 $pdo->prepare('UPDATE teams SET leader_id = ?, leader_name = ? WHERE id = ?')->execute([$id, $name, $teamId]);
             }
-            if ($role === 'Office Manager') {
+            if ($role === 'Office Manager' && $officeId !== null) {
                 $pdo->prepare('UPDATE offices SET manager_id = ?, manager_name = ?, manager_email = ? WHERE id = ?')->execute([$id, $name, $email, $officeId]);
             }
             $pdo->commit();

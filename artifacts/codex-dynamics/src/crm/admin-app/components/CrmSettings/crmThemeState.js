@@ -52,15 +52,15 @@ export const CRM_THEME_PRESETS = [
     isLight: true,
     accent: '#0071E3',
     accentHover: '#0077ED',
-    bg: '#F5F5F7',
-    card: '#FFFFFF',
-    cardHover: '#F2F2F7',
+    bg: '#EEF0F3',
+    card: '#F8F9FB',
+    cardHover: '#ECEEF2',
     border: 'rgba(29, 29, 31, 0.16)',
     borderHover: 'rgba(29, 29, 31, 0.24)',
     textPrimary: '#1D1D1F',
     textSecondary: '#6E6E73',
     textMuted: '#6E6E73',
-    inputBg: '#FFFFFF',
+    inputBg: '#FBFBFC',
     tag: 'Cupertino Light',
   },
   {
@@ -339,20 +339,23 @@ export function applyCrmThemeToDom(settings = getCrmThemeSettings()) {
     });
     return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.42;
   };
-  const bg = isHex(settings.customBg) ? settings.customBg : preset.bg;
+  const isGlaringWhite = (value) => isHex(value) && /^#(f{3}|f{6}|fefefe|fdfdfd|fcfcfc|fbfbfb|fafafa)$/i.test(value.trim());
+  const requestedBg = isHex(settings.customBg) ? settings.customBg : preset.bg;
+  const bg = isGlaringWhite(requestedBg) ? '#EEF0F3' : requestedBg;
   const isLight = isLightColor(bg);
-  const standardCard = isLight ? '#FFFFFF' : '#242426';
+  const standardCard = isLight ? '#F8F9FB' : '#242426';
   const presetCard = isLightColor(preset.card) === isLight ? preset.card : standardCard;
-  const card = isHex(settings.customCard) && isLightColor(settings.customCard) === isLight
+  const requestedCard = isHex(settings.customCard) && isLightColor(settings.customCard) === isLight
     ? settings.customCard
     : presetCard;
-  const cardHover = isLight ? '#F2F2F7' : '#2C2C2E';
+  const card = isGlaringWhite(requestedCard) ? standardCard : requestedCard;
+  const cardHover = isLight ? '#ECEEF2' : '#2C2C2E';
   const border = isLight ? 'rgba(29, 29, 31, 0.16)' : 'rgba(255, 255, 255, 0.14)';
   const borderHover = isLight ? 'rgba(29, 29, 31, 0.24)' : 'rgba(255, 255, 255, 0.22)';
   const textPrimary = isLight ? '#1D1D1F' : '#F5F5F7';
   const textSecondary = isLight ? '#626269' : '#B0B0B5';
   const textMuted = isLight ? '#6E6E73' : '#929298';
-  const inputBg = isLight ? '#FFFFFF' : '#1C1C1E';
+  const inputBg = isLight ? '#FBFBFC' : '#1C1C1E';
   const accentForeground = isLightColor(accent) ? '#1D1D1F' : '#FFFFFF';
 
   const root = document.querySelector('.crm-admin-app') || document.documentElement;

@@ -2617,7 +2617,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #14171A;
+  background: var(--crm-card-hover);
   border: 1px solid var(--crm-card-hover);
   border-radius: 5px;
   padding: 4px 10px;
@@ -2637,7 +2637,7 @@
 .crm-admin-app .crm-preview-segmented {
   display: inline-flex;
   align-items: center;
-  background: #14171A;
+  background: var(--crm-card-hover);
   border: 1px solid var(--crm-card-hover);
   border-radius: 5px;
   padding: 2px;
@@ -2671,7 +2671,7 @@
 }
 
 .crm-admin-app .crm-preview-action-icon-btn {
-  background: #14171A;
+  background: var(--crm-card-hover);
   border: 1px solid var(--crm-card-hover);
   color: var(--crm-text-secondary);
   border-radius: 5px;
@@ -2736,7 +2736,7 @@
 }
 
 .crm-admin-app .crm-preview-jump-select {
-  background: #14171A;
+  background: var(--crm-card-hover);
   border: 1px solid var(--crm-card-hover);
   border-radius: 4px;
   color: var(--crm-text-primary);
@@ -3667,7 +3667,7 @@
 }
 
 .crm-admin-app .crm-preview-url-box {
-  background: #1F2228 !important;
+  background: var(--crm-card-hover) !important;
   border: 1px solid var(--crm-border) !important;
   border-radius: 7px !important;
   color: var(--crm-text-secondary) !important;
@@ -3701,7 +3701,7 @@
 }
 
 .crm-admin-app .crm-preview-segmented {
-  background: #1F2228 !important;
+  background: var(--crm-card-hover) !important;
   border: 1px solid var(--crm-border) !important;
   border-radius: 7px !important;
   padding: 2px !important;
@@ -3844,7 +3844,7 @@
 }
 
 .crm-admin-app .crm-google-preview {
-  background: #1F2228 !important;
+  background: var(--crm-card-hover) !important;
   border: 1px solid var(--crm-card) !important;
   border-radius: 8px !important;
   padding: 14px 16px !important;
@@ -3863,7 +3863,7 @@
 }
 
 .crm-admin-app .crm-og-social-card-box {
-  background: #1F2228 !important;
+  background: var(--crm-card-hover) !important;
   border: 1px solid var(--crm-card) !important;
   border-radius: 10px !important;
   overflow: hidden !important;

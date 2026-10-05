@@ -727,7 +727,7 @@ export default function LeadProfileModal({
                   <div style={{ fontSize: 11, color: 'var(--crm-text-secondary, #8E8E93)', textTransform: 'uppercase', fontWeight: 600, marginBottom: 8 }}>
                     Portal Username / Login Email
                   </div>
-                  <div style={{ fontSize: 14, color: '#FFFFFF', fontWeight: 600, fontFamily: 'monospace', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ fontSize: 14, color: 'var(--crm-text-primary)', fontWeight: 600, fontFamily: 'monospace', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <span>{lead.email || 'No email assigned'}</span>
                     {lead.email && (
                       <button
@@ -754,10 +754,10 @@ export default function LeadProfileModal({
                       placeholder="No password set"
                       style={{
                         flex: 1,
-                        background: 'rgba(255, 255, 255, 0.06)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        background: 'var(--crm-input-bg)',
+                        border: '1px solid var(--crm-border)',
                         borderRadius: 6,
-                        color: '#FFFFFF',
+                        color: 'var(--crm-text-primary)',
                         padding: '6px 10px',
                         fontSize: 13,
                         fontFamily: 'monospace',
@@ -771,7 +771,7 @@ export default function LeadProfileModal({
                       style={{
                         padding: '6px 12px',
                         borderRadius: 6,
-                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                        border: '1px solid var(--crm-border)',
                         background: 'rgba(255, 255, 255, 0.08)',
                         color: '#FFFFFF',
                         fontSize: 12,
@@ -818,10 +818,10 @@ export default function LeadProfileModal({
                     placeholder="Enter new password (e.g. client2026!)..."
                     style={{
                       flex: '1 1 240px',
-                      background: 'rgba(255, 255, 255, 0.06)',
-                      border: '1px solid rgba(255, 255, 255, 0.15)',
+                      background: 'var(--crm-input-bg)',
+                      border: '1px solid var(--crm-border)',
                       borderRadius: 8,
-                      color: '#FFFFFF',
+                      color: 'var(--crm-text-primary)',
                       padding: '9px 12px',
                       fontSize: 13,
                       outline: 'none',
@@ -835,8 +835,8 @@ export default function LeadProfileModal({
                       padding: '9px 20px',
                       borderRadius: 8,
                       border: 'none',
-                      background: !newPasswordInput.trim() ? 'rgba(255, 255, 255, 0.08)' : '#0ECB81',
-                      color: !newPasswordInput.trim() ? '#8E8E93' : '#FFFFFF',
+                      background: !newPasswordInput.trim() ? 'var(--crm-card-hover)' : '#0ECB81',
+                      color: !newPasswordInput.trim() ? 'var(--crm-text-muted)' : '#FFFFFF',
                       fontSize: 13,
                       fontWeight: 600,
                       cursor: !newPasswordInput.trim() ? 'not-allowed' : 'pointer',
@@ -854,7 +854,7 @@ export default function LeadProfileModal({
               {/* Direct Portal Launch Banner */}
               <div style={{ marginTop: 14, background: 'rgba(10, 132, 255, 0.08)', border: '1px solid rgba(10, 132, 255, 0.25)', borderRadius: 10, padding: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
                 <div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: '#FFFFFF' }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--crm-text-primary)' }}>
                     🚀 Direct Client Portal Session
                   </div>
                   <div style={{ fontSize: 11, color: 'var(--crm-text-secondary, #8E8E93)', marginTop: 2 }}>
@@ -967,10 +967,10 @@ export default function LeadProfileModal({
                   placeholder="Type a response to the client (press Enter to send)..."
                   style={{
                     flex: 1,
-                    background: 'rgba(255, 255, 255, 0.06)',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    background: 'var(--crm-input-bg)',
+                    border: '1px solid var(--crm-border)',
                     borderRadius: 10,
-                    color: '#FFFFFF',
+                    color: 'var(--crm-text-primary)',
                     padding: '10px 14px',
                     fontSize: 13,
                     outline: 'none',
@@ -983,8 +983,8 @@ export default function LeadProfileModal({
                     padding: '10px 22px',
                     borderRadius: 10,
                     border: 'none',
-                    background: !chatInputText.trim() ? 'rgba(255, 255, 255, 0.08)' : '#0071E3',
-                    color: !chatInputText.trim() ? '#8E8E93' : '#FFFFFF',
+                    background: !chatInputText.trim() ? 'var(--crm-card-hover)' : '#0071E3',
+                    color: !chatInputText.trim() ? 'var(--crm-text-muted)' : '#FFFFFF',
                     fontSize: 13,
                     fontWeight: 600,
                     cursor: !chatInputText.trim() ? 'not-allowed' : 'pointer',
@@ -1033,7 +1033,7 @@ export default function LeadProfileModal({
                   <div style={{ fontSize: 11, color: 'var(--crm-text-secondary, #8E8E93)', textTransform: 'uppercase', marginBottom: 4 }}>
                     Last Portal Session
                   </div>
-                  <div style={{ fontSize: 13, color: '#FFFFFF', fontWeight: 600 }}>
+                  <div style={{ fontSize: 13, color: 'var(--crm-text-primary)', fontWeight: 600 }}>
                     {clientActivityData.stats?.lastLogin ? new Date(clientActivityData.stats.lastLogin).toLocaleString() : 'Recent'}
                   </div>
                 </div>
@@ -1070,7 +1070,7 @@ export default function LeadProfileModal({
                               <span
                                 style={{
                                   background: isLogin ? 'rgba(48, 209, 88, 0.15)' : isTicket ? 'rgba(10, 132, 255, 0.15)' : 'rgba(255, 255, 255, 0.08)',
-                                  color: isLogin ? '#30D158' : isTicket ? '#0A84FF' : '#FFFFFF',
+                                  color: isLogin ? '#30D158' : isTicket ? '#0A84FF' : 'var(--crm-text-primary)',
                                   borderRadius: 4,
                                   padding: '1px 6px',
                                   fontSize: 10,

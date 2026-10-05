@@ -992,7 +992,7 @@
 
 .crm-admin-app h3 { font-size: 1.1rem; font-weight: 600; }
 
-.crm-admin-app button:not(.accounting-workspace button), .crm-admin-app select, .crm-admin-app input:not(.aw-search-input) {
+.crm-admin-app :where(button:not(.accounting-workspace button)), .crm-admin-app select, .crm-admin-app input:not(.aw-search-input) {
   border-radius: 4px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-weight: 400;
@@ -1001,7 +1001,7 @@
   transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
-.crm-admin-app button:not(.accounting-workspace button) {
+.crm-admin-app :where(button:not(.accounting-workspace button)) {
   background: var(--crm-accent);
   color: var(--crm-card);
   border: none;
@@ -1015,15 +1015,15 @@
   font-weight: 600;
 }
 
-.crm-admin-app button:not(.accounting-workspace button):hover {
+.crm-admin-app :where(button:not(.accounting-workspace button)):hover {
   background: var(--crm-accent-hover);
 }
 
-.crm-admin-app button:not(.accounting-workspace button):active {
+.crm-admin-app :where(button:not(.accounting-workspace button)):active {
   background: #dba90a;
 }
 
-.crm-admin-app button:not(.accounting-workspace button):disabled {
+.crm-admin-app :where(button:not(.accounting-workspace button)):disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -8456,4 +8456,124 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Mode-safe foregrounds: legacy rules hardcode dark-mode text colours that
+   vanish on the light palette. Map them back onto the theme tokens. */
+.crm-admin-app[data-crm-mode] .crm-brand-text .crm-brand-tag {
+  color: var(--crm-text-secondary) !important;
+  background: var(--crm-card-hover) !important;
+  border-color: var(--crm-border) !important;
+}
+.crm-admin-app[data-crm-mode] .crm-user-chip {
+  background: var(--crm-card) !important;
+  border-color: var(--crm-border) !important;
+}
+.crm-admin-app[data-crm-mode] .crm-user-chip:hover {
+  background: var(--crm-card-hover) !important;
+}
+.crm-admin-app[data-crm-mode] .crm-user-chip-name { color: var(--crm-text-primary) !important; }
+.crm-admin-app[data-crm-mode] .crm-user-chip-role { color: var(--crm-text-secondary) !important; }
+.crm-admin-app[data-crm-mode] .crm-user-chip-avatar { color: #1D1D1F !important; }
+.crm-admin-app[data-crm-mode] .crm-brand-mark { color: #FFFFFF !important; }
+.crm-admin-app[data-crm-mode] .crm-top-actions .crm-logout-btn span,
+.crm-admin-app[data-crm-mode] .crm-top-actions .hi-label,
+.crm-admin-app[data-crm-mode] .crm-top-actions .hi-sep,
+.crm-admin-app[data-crm-mode] .crm-settings-tab-btn.active span,
+.crm-admin-app[data-crm-mode] .crm-preview-segmented-btn.active span {
+  color: inherit !important;
+}
+.crm-admin-app[data-crm-mode] .crm-settings-tab-btn.active .crm-tab-count-pill {
+  background: rgba(255, 255, 255, 0.22) !important;
+  color: inherit !important;
+}
+
+.crm-admin-app[data-crm-mode] .crm-super-admin-tabs,
+.crm-admin-app[data-crm-mode] .crm-role-panel-header > .crm-super-admin-tabs,
+.crm-admin-app[data-crm-mode] .crm-role-panel-header > .crm-react-capability-tabs {
+  background: var(--crm-card-hover) !important;
+  border: 1px solid var(--crm-border) !important;
+}
+.crm-admin-app[data-crm-mode] .crm-super-admin-tab-btn:not(.crm-active) {
+  color: var(--crm-text-secondary) !important;
+  background: transparent !important;
+}
+.crm-admin-app[data-crm-mode] .crm-super-admin-tab-btn:not(.crm-active):hover {
+  color: var(--crm-text-primary) !important;
+  background: color-mix(in srgb, var(--crm-text-primary) 6%, transparent) !important;
+}
+.crm-admin-app[data-crm-mode] .crm-super-admin-tab-btn.crm-active,
+.crm-admin-app[data-crm-mode] .crm-role-panel-header .crm-super-admin-tab-btn.crm-active {
+  background: var(--crm-card) !important;
+  color: var(--crm-text-primary) !important;
+  border: 1px solid var(--crm-border) !important;
+}
+
+.crm-admin-app[data-crm-mode] :where(
+  .crm-ios-title-wrap h4,
+  .crm-apple-theme-title,
+  .crm-ios-tile-title,
+  .crm-ios-sec-name,
+  .crm-nav-chip:hover,
+  .crm-ios-mode-btn:hover,
+  .crm-apple-filter-pill:hover,
+  .crm-ios-card-collapse-btn:hover,
+  .crm-apple-apply-stage-btn,
+  .crm-btn-secondary:hover:not(:disabled),
+  .crm-floating-btn.secondary:hover,
+  .crm-coolors-picker-btn:hover,
+  .crm-coolors-copy-btn:hover,
+  .sess-toast
+) {
+  color: var(--crm-text-primary) !important;
+}
+.crm-admin-app[data-crm-mode] .crm-nav-chip:not(:hover),
+.crm-admin-app[data-crm-mode] .crm-ios-mode-btn:not(:hover):not(.active),
+.crm-admin-app[data-crm-mode] .crm-apple-filter-pill:not(:hover):not(.active),
+.crm-admin-app[data-crm-mode] .crm-apple-spec-pill,
+.crm-admin-app[data-crm-mode] .crm-ios-arrow-btn,
+.crm-admin-app[data-crm-mode] .crm-apple-theme-desc,
+.crm-admin-app[data-crm-mode] .crm-ios-tile-desc,
+.crm-admin-app[data-crm-mode] .crm-ios-title-wrap p {
+  color: var(--crm-text-secondary) !important;
+  border-color: var(--crm-border);
+}
+.crm-admin-app[data-crm-mode] .crm-settings-tab-btn:not(.active):not(:hover),
+.crm-admin-app[data-crm-mode] .crm-preview-segmented-btn:not(.active):not(:hover) {
+  background: transparent !important;
+  color: var(--crm-text-secondary) !important;
+}
+.crm-admin-app[data-crm-mode] .crm-settings-tab-btn:not(.active):hover,
+.crm-admin-app[data-crm-mode] .crm-preview-segmented-btn:not(.active):hover {
+  background: color-mix(in srgb, var(--crm-text-primary) 6%, transparent) !important;
+  color: var(--crm-text-primary) !important;
+}
+
+.crm-admin-app[data-crm-mode="light"] .crm-status-pill.saved {
+  color: #1E7B34 !important;
+  background: rgba(48, 209, 88, 0.14) !important;
+  border-color: rgba(30, 123, 52, 0.28) !important;
+}
+.crm-admin-app[data-crm-mode="light"] .crm-status-pill.unsaved {
+  color: #9A5A00 !important;
+  background: rgba(255, 159, 10, 0.14) !important;
+  border-color: rgba(154, 90, 0, 0.28) !important;
+}
+
+.crm-admin-app[data-crm-mode] .crm-super-admin-card,
+.crm-admin-app[data-crm-mode] .crm-card {
+  border-color: var(--crm-border) !important;
+}
+.crm-admin-app[data-crm-mode] :where(hr, .crm-divider) {
+  border-color: var(--crm-border) !important;
+}
+.crm-admin-app[data-crm-mode="light"] :where(table) :where(th, td) {
+  border-color: var(--crm-border) !important;
+}
+.crm-admin-app[data-crm-mode="light"] .crm-super-admin-table tr:hover td,
+.crm-admin-app[data-crm-mode="light"] table.crm-table tr:hover td {
+  background: color-mix(in srgb, var(--crm-text-primary) 4%, transparent) !important;
+}
+.crm-admin-app[data-crm-mode] .crm-dashboard-card {
+  border: 1px solid var(--crm-border) !important;
 }

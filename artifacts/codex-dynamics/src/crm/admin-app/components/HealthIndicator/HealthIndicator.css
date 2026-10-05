@@ -9,11 +9,11 @@
   align-items: center;
   gap: 6px;
   background: var(--crm-card);
-  border: 1px solid var(--crm-card);
+  border: 1px solid var(--crm-border);
   border-radius: 20px;
   padding: 4px 10px;
   font-size: 11px;
-  color: #c8cdda;
+  color: var(--crm-text-secondary);
   cursor: pointer;
   transition: all 0.15s ease;
 }
@@ -44,7 +44,7 @@
 }
 
 .hi-sep {
-  color: #4b5563;
+  color: var(--crm-text-muted);
 }
 
 .hi-ms {

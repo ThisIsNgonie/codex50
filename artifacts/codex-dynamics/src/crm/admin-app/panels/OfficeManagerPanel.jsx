@@ -353,19 +353,19 @@ function OfficeManagerPanel({ data, setData, currentUser, assignTeamLeader, crea
       {omTab === 'create' && (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
           <div className="crm-super-admin-card">
-            <h3 style={{ margin: '0 0 16px 0', fontSize: 14, color: 'var(--crm-text-primary)' }}>New Team &amp; Leader</h3>
+            <h3 style={{ margin: '0 0 16px 0', fontSize: 14, color: 'var(--crm-text-primary)' }}>New Team</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <div><div style={{ fontSize: 12, color: 'var(--crm-text-secondary)', marginBottom: 4 }}>Team Name</div><input value={newTeamName} onChange={e => setNewTeamName(e.target.value)} placeholder="Team name..." autoComplete="off" className="crm-super-admin-input" /></div>
-              <div><div style={{ fontSize: 12, color: 'var(--crm-text-secondary)', marginBottom: 4 }}>Max Size</div><input value={newTeamSize} onChange={e => setNewTeamSize(e.target.value)} placeholder="e.g. 10" type="number" autoComplete="off" className="crm-super-admin-input" /></div>
-              <div><div style={{ fontSize: 12, color: 'var(--crm-text-secondary)', marginBottom: 4 }}>Leader Name</div><input value={newLeaderName} onChange={e => setNewLeaderName(e.target.value)} placeholder="Leader name..." autoComplete="off" className="crm-super-admin-input" /></div>
-              <div><div style={{ fontSize: 12, color: 'var(--crm-text-secondary)', marginBottom: 4 }}>Leader Password</div><input value={newLeaderPassword} onChange={e => setNewLeaderPassword(e.target.value)} placeholder="Password..." type="password" autoComplete="new-password" className="crm-super-admin-input" /></div>
-              <button className="crm-super-admin-btn" style={{ width: '100%', justifyContent: 'center', marginTop: 4 }} disabled={!newTeamName || !newTeamSize || !newLeaderName || !newLeaderPassword} onClick={async () => {
+              <div><div style={{ fontSize: 12, color: 'var(--crm-text-secondary)', marginBottom: 4 }}>Max Size (optional)</div><input value={newTeamSize} onChange={e => setNewTeamSize(e.target.value)} placeholder="e.g. 10" type="number" autoComplete="off" className="crm-super-admin-input" /></div>
+              <div><div style={{ fontSize: 12, color: 'var(--crm-text-secondary)', marginBottom: 4 }}>Leader Name (optional)</div><input value={newLeaderName} onChange={e => setNewLeaderName(e.target.value)} placeholder="Leader name..." autoComplete="off" className="crm-super-admin-input" /></div>
+              <div><div style={{ fontSize: 12, color: 'var(--crm-text-secondary)', marginBottom: 4 }}>Leader Password (optional)</div><input value={newLeaderPassword} onChange={e => setNewLeaderPassword(e.target.value)} placeholder="Password..." type="password" autoComplete="new-password" className="crm-super-admin-input" /></div>
+              <button className="crm-super-admin-btn" style={{ width: '100%', justifyContent: 'center', marginTop: 4 }} disabled={!newTeamName.trim() || Boolean(newLeaderName.trim()) !== Boolean(newLeaderPassword)} onClick={async () => {
                 const r = await createTeamLeader(currentUser.officeId, newTeamName, newLeaderName, newLeaderPassword, newTeamSize);
-                if (!r) return;
-                if (r.loginLink) setNewLeaderLink(r.loginLink);
+                if (r === undefined) return;
+                if (r?.loginLink) setNewLeaderLink(r.loginLink);
                 setNewTeamName(''); setNewTeamSize(''); setNewLeaderName(''); setNewLeaderPassword('');
-                showNotification('Team and Leader created!');
-              }}>✓ Create Team &amp; Leader</button>
+                showNotification(r ? 'Team and Leader created!' : 'Team created!');
+              }}>✓ Create Team</button>
               {newLeaderLink && (
                 <div style={{ background: 'rgba(69,210,160,0.06)', border: '1px solid #45d2a030', borderRadius: 8, padding: 12 }}>
                   <div style={{ fontSize: 11, color: 'var(--crm-text-secondary)', marginBottom: 6 }}>Leader Login Link</div>
@@ -381,12 +381,12 @@ function OfficeManagerPanel({ data, setData, currentUser, assignTeamLeader, crea
                 <div style={{ fontSize: 12, color: 'var(--crm-text-secondary)', marginBottom: 4 }}>Assign to Team</div>
                 <select value={teamId} onChange={e => setTeamId(e.target.value)} className="crm-super-admin-select">
                   <option value="">No team (direct to this office)</option>
-                  {teamsForOffice.map(t => <option key={t.id} value={t.id}>{t.name} ({getTeamAgentCount(t.id, data.users)}/{t.maxSize})</option>)}
+                  {teamsForOffice.map(t => <option key={t.id} value={t.id}>{t.name} ({getTeamAgentCount(t.id, data.users)}/{t.maxSize ?? "∞"})</option>)}
                 </select>
               </div>
               <div><div style={{ fontSize: 12, color: 'var(--crm-text-secondary)', marginBottom: 4 }}>Agent Name</div><input value={newAgentName} onChange={e => setNewAgentName(e.target.value)} placeholder="Agent name..." autoComplete="off" className="crm-super-admin-input" /></div>
               <div><div style={{ fontSize: 12, color: 'var(--crm-text-secondary)', marginBottom: 4 }}>Agent Password</div><input value={newAgentPassword} onChange={e => setNewAgentPassword(e.target.value)} placeholder="Password..." type="password" autoComplete="new-password" className="crm-super-admin-input" /></div>
-              <button className="crm-super-admin-btn" style={{ width: '100%', justifyContent: 'center', marginTop: 4 }} disabled={!teamId || !newAgentName || !newAgentPassword} onClick={async () => {
+              <button className="crm-super-admin-btn" style={{ width: '100%', justifyContent: 'center', marginTop: 4 }} disabled={!newAgentName || !newAgentPassword} onClick={async () => {
                 const r = await createAgent(teamId || null, newAgentName, newAgentPassword, currentUser.officeId);
                 if (!r) return;
                 if (r.loginLink) setNewAgentLink(r.loginLink);

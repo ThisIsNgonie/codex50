@@ -1000,3 +1000,45 @@ test('admin login sets an HttpOnly SameSite session cookie and logout clears it'
   const afterLogout = await requestJson('/api/admin/audit', { headers: { Cookie: cookie } });
   assert.equal(afterLogout.response.status, 401);
 });
+
+test('offices, teams, and staff can be created independently of each other', async () => {
+  const office = await requestJson('/api/admin/offices', {
+    token: superAdminToken,
+    method: 'POST',
+    body: { name: 'Managerless Office' },
+  });
+  assert.equal(office.response.status, 201, JSON.stringify(office.data));
+  assert.equal(office.data.manager ?? null, null);
+
+  const team = await requestJson('/api/admin/teams', {
+    token: superAdminToken,
+    method: 'POST',
+    body: { name: 'Officeless Team' },
+  });
+  assert.equal(team.response.status, 201, JSON.stringify(team.data));
+  assert.equal(team.data.team.office_id, null);
+  assert.equal(team.data.leader, null);
+
+  const manager = await requestJson('/api/admin/staff', {
+    token: superAdminToken,
+    method: 'POST',
+    body: { role: 'Office Manager', name: 'Floating Manager', password: 'manager-pass-123' },
+  });
+  assert.equal(manager.response.status, 201, JSON.stringify(manager.data));
+  assert.equal(manager.data.staff.office_id, null);
+
+  const agent = await requestJson('/api/admin/staff', {
+    token: superAdminToken,
+    method: 'POST',
+    body: { role: 'Agent', name: 'Direct Agent', password: 'agent-pass-1234' },
+  });
+  assert.equal(agent.response.status, 201, JSON.stringify(agent.data));
+  assert.equal(agent.data.staff.team_id, null);
+
+  const managerToTeam = await requestJson('/api/admin/staff', {
+    token: superAdminToken,
+    method: 'POST',
+    body: { role: 'Office Manager', name: 'Team Manager', password: 'manager-pass-123', team_id: team.data.team.id },
+  });
+  assert.equal(managerToTeam.response.status, 422);
+});

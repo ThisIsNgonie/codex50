@@ -1,20 +1,23 @@
 @import "tailwindcss";
 
+/* Tie `dark:` utilities to the in-app theme toggle, not the OS color scheme. */
+@custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
+
 @theme {
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
     ui-sans-serif, system-ui, sans-serif;
   --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display",
     "Segoe UI", ui-sans-serif, system-ui, sans-serif;
 
-  --color-background: #f5f5f7;
+  --color-background: #eef0f3;
   --color-foreground: #111113;
-  --color-card: #ffffff;
+  --color-card: #f8f9fb;
   --color-card-foreground: #111113;
-  --color-popover: #ffffff;
+  --color-popover: #f8f9fb;
   --color-popover-foreground: #111113;
   --color-primary: #0071e3;
   --color-primary-foreground: #ffffff;
-  --color-secondary: #f2f2f7;
+  --color-secondary: #e9ebef;
   --color-secondary-foreground: #111113;
   --color-muted: #e5e5ea;
   --color-muted-foreground: #5c5c62;
@@ -31,7 +34,7 @@
   --color-hero-ash: #3a3c40;
   --color-ink: #000000;
   --color-paper: #ffffff;
-  --color-fill: #f2f2f7;
+  --color-fill: #e9ebef;
   --color-fill-elevated: #fafafc;
   --color-label: #111113;
   --color-subtle: #86868b;
@@ -85,18 +88,18 @@
 
 :root[data-theme="light"] {
   color-scheme: light;
-  --color-background: #f5f5f7;
+  --color-background: #eef0f3;
   --color-foreground: #1d1d1f;
-  --color-card: #ffffff;
+  --color-card: #f8f9fb;
   --color-card-foreground: #1d1d1f;
-  --color-popover: #ffffff;
+  --color-popover: #f8f9fb;
   --color-popover-foreground: #1d1d1f;
-  --color-secondary: #f2f2f7;
+  --color-secondary: #e9ebef;
   --color-secondary-foreground: #1d1d1f;
   --color-muted: #e8e8ed;
   --color-muted-foreground: #626269;
   --color-border: #c6c6cc;
-  --color-input: #ffffff;
+  --color-input: #fbfbfc;
   --color-paper: #ffffff;
   --color-ink: #000000;
   --color-label: #1d1d1f;
@@ -613,14 +616,14 @@
 
 :root,
 [data-theme="light"] {
-  --color-background: #f5f5f7;
+  --color-background: #eef0f3;
   --color-foreground: #1d1d1f;
-  --color-card: #ffffff;
+  --color-card: #f8f9fb;
   --color-card-foreground: #1d1d1f;
-  --color-popover: #ffffff;
+  --color-popover: #f8f9fb;
   --color-popover-foreground: #1d1d1f;
   --color-paper: #ffffff;
-  --color-fill: #f5f5f7;
+  --color-fill: #e9ebef;
   --color-fill-elevated: #fbfbfd;
   --color-label: #1d1d1f;
   --color-subtle: #86868b;
